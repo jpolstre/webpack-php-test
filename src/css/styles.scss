@@ -1,0 +1,14 @@
+@import 'colores';
+body {
+    text-align: center;
+    margin-top: 100px;
+    background-color: $color1;
+    color: $color2;
+}
+button{
+  padding: 20px;
+  background-color: #333;
+  border: none;
+  color:#fff;
+  border-radius: 100%; 
+}

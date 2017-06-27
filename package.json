@@ -1,0 +1,36 @@
+{
+  "name": "P2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack-dev-server --content-base dist/",
+    "prod": "webpack -p"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.18.12",
+    "css-loader": "^0.28.4",
+    "extract-text-webpack-plugin": "^2.1.2",
+    "gulp": "^3.9.1",
+    "gulp-connect-php": "^1.0.1",
+    "gulp-imagemin": "^3.3.0",
+    "gulp-uglify": "^3.0.0",
+    "gulp-webpack": "^1.5.0",
+    "jquery": "^3.2.1",
+    "node-sass": "^4.5.3",
+    "npm-run-all": "^4.0.2",
+    "optimize-css-assets-webpack-plugin": "^2.0.0",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.18.2",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.1",
+    "webpack": "^3.0.0",
+    "webpack-dev-server": "^2.5.0"
+  },
+  "dependencies": {
+    "del": "^3.0.0"
+  }
+}
