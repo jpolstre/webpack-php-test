@@ -1,14 +1,17 @@
 var gulp = require('gulp'),
   connect = require('gulp-connect-php'),
-  browserSync = require('browser-sync').create();
+  browserSync = require('browser-sync').create(),
 
-webpack = require('gulp-webpack');
-uglify = require('gulp-uglify');
-imagemin = require('gulp-imagemin');
-del = require('del');
+  // webpack = require('gulp-webpack');
+  webpack = require('webpack'),
+  config = require('./webpack.config.js'),
+  gutil = require('gulp-util'),
+  uglify = require('gulp-uglify'),
+  imagemin = require('gulp-imagemin'),
+  del = require('del');
 
 var paths = {
-  scripts: ['src/js/**/*.js'],
+  scripts: ['src/js/**/*.js', 'src/css/**/*'],
   images: ['src/img/**/*'],
   php: ['src/views/**/*.php']
 };
@@ -23,14 +26,37 @@ gulp.task('php', function () {
   gulp.src(paths.php).pipe(gulp.dest('dist/views'));
 });
 
-gulp.task('scripts', function () {
-  // Minify and copy all JavaScript (except vendor scripts)
-  // with sourcemaps all the way down
-  return gulp.src(paths.scripts)
-    // .pipe(uglify())
-    .pipe(webpack(require('./webpack.config.js')))
-    .pipe(gulp.dest('dist/js'));
+function onBuild(done) {
+  return function (err, stats) {
+    if (err) {
+      gutil.log('Error', err);
+      if (done) {
+        done();
+      }
+    } else {
+      Object.keys(stats.compilation.assets).forEach(function (key) {
+        gutil.log('Webpack: output ', gutil.colors.green(key));
+      });
+      gutil.log('Webpack: ', gutil.colors.blue('finished ', stats.compilation.name));
+      if (done) {
+        done();
+      }
+    }
+  }
+}
+
+gulp.task('scripts', function (done) {
+  const compiler = webpack(config);
+  compiler.run(function (err, stats) {});
+  const watching = compiler.watch({
+    aggregateTimeout: 300,
+    poll: 1000
+  }, (err, stats) => {
+    // Print watch/build result here...
+    console.log(stats);
+  });
 });
+
 // Copy all static images
 gulp.task('images', function () {
   return gulp.src(paths.images)
@@ -45,18 +71,17 @@ gulp.task('connect-sync', function () {
   connect.server({}, function () {
     browserSync.init({
       proxy: 'localhost:8000',
-      open: 'external'//INJECTA EN TODO EL DOMINIO.
+      open: 'external' //INJECTA EN TODO EL DOMINIO.
     });
   });
 
-  // Rerun the task when a file changes
-  // gulp.task('watch', function () {
-  //   gulp.watch(paths.scripts, ['scripts']);
-  //   gulp.watch(paths.images, ['images']);
-  // });
-
   gulp.watch(paths.scripts).on('change', function () {
-    gulp.src(paths.scripts).pipe(webpack(require('./webpack.config.js'))).pipe(gulp.dest('dist/js')).pipe(browserSync.stream());
+    // gulp.src(paths.scripts).pipe(webpack(config).run(onBuild(done))).pipe(gulp.dest('dist/js')).pipe(browserSync.stream());
+    // browserSync.reload();
+    setTimeout(function(){
+      browserSync.reload();
+    }, 1000);
+  
     // browserSync.reload();
   });
   // .pipe(browserSync.stream())
@@ -74,4 +99,4 @@ gulp.task('connect-sync', function () {
 });
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['scripts' ,'php', 'images', 'connect-sync']);
+gulp.task('default', ['scripts', 'php', 'images', 'connect-sync']);

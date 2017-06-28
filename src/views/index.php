@@ -4,7 +4,7 @@
 <head>
     <?php include 'header.php'; ?>
 </head>
-
+<link rel="stylesheet" href="http://localhost:3000/dist/css/main.css">
 <body>
     <h1>HOME</h1>
     <!--<body>src to public folder-->

@@ -1,25 +1,54 @@
-module.exports = {
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
+const config = {
 	entry: {
-		// adicionar aqui para otras paginas php o html
+		// adicionar para otras paginas php o html
 		main: __dirname + '/src/js/main.js',
 		usuarios: __dirname + '/src/js/usuarios.js',
-
+		productos: __dirname + '/src/js/productos.js',
 	},
+	watch:true,
 	output: {
 		path: __dirname + '/dist/js',
-		filename: '[name].bundle.js',
-		publicPath: '/dist' //corprotec.com/public online
+		publicPath: '/dist', //corprotec.com/public online
+		filename: '[name].bundle.js'
 	},
-	watch: true,
+	
 	module: {
-		loaders: [{
-				test: /\.scss$/,
-				loader: 'style-loader!css-loader!sass-loader'
+		// loaders:[
+		// 	{ test: /\.styl$/, loader: 'style-loader!css-loader!stylus-loader' }
+		// ] ok.
+
+		rules: [{
+				test: /\.styl$/,
+				use: ExtractTextPlugin.extract({
+					fallback: 'style-loader',
+					//resolve-url-loader may be chained before sass-loader if necessary
+					use: ['css-loader', 'stylus-loader']
+				})
 			},
 			{
-				test: /\.styl$/,
-				loader: 'style-loader!css-loader!stylus-loader'
+				test: /\.scss$/,
+				use: ExtractTextPlugin.extract({
+					fallback: 'style-loader',
+					use: ['css-loader', 'sass-loader']
+				})
 			}
 		]
-	}
+	},
+
+	plugins: [
+		// new webpack.optimize.UglifyJsPlugin(), //only production.
+		new ExtractTextPlugin({
+			filename: (getPath) => {
+				return getPath('../css/[name].css');
+			},
+			allChunks: true
+		}),
+		// new OptimizeCssAssetsPlugin()
+	]
+
 };
+module.exports = config;
