@@ -11,7 +11,7 @@ var gulp = require('gulp'),
   del = require('del');
 
 var paths = {
-  scripts: ['src/js/**/*.js', 'src/css/**/*'],
+  scripts: ['src/js/**/*', 'src/css/**/*'],
   images: ['src/img/**/*'],
   php: ['src/views/**/*.php']
 };

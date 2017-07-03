@@ -25,24 +25,32 @@ const config = {
 		// ] ok.
 
 		rules: [{
-				test: /\.styl$/,
-				use: ExtractTextPlugin.extract({
-					fallback: 'style-loader',
+			test: /(\.js|\.jsx)$/,
+			loader: 'babel-loader',
+			exclude: /node_modules/,
+			options: {
+				presets: [['es2015', { loose: true }], 'react'],
+			},
+		},
+		{
+		test: /\.styl$/,
+		use: ExtractTextPlugin.extract({
+			fallback: 'style-loader',
 					//resolve-url-loader may be chained before sass-loader if necessary
 					use: ['css-loader', 'stylus-loader']
 				})
-			},
-			{
-				test: /\.scss$/,
-				use: ExtractTextPlugin.extract({
-					fallback: 'style-loader',
-					use: ['css-loader', 'sass-loader']
-				})
-			}
-		]
 	},
+	{
+		test: /\.scss$/,
+		use: ExtractTextPlugin.extract({
+			fallback: 'style-loader',
+			use: ['css-loader', 'sass-loader']
+		})
+	}
+	]
+},
 
-	plugins: [
+plugins: [
 		// new webpack.optimize.UglifyJsPlugin(), //only production.
 		new ExtractTextPlugin({
 			filename: (getPath) => {
@@ -51,7 +59,7 @@ const config = {
 			allChunks: true
 		}),
 		// new OptimizeCssAssetsPlugin()
-	]
+		]
 
-};
-module.exports = config;
+	};
+	module.exports = config;
