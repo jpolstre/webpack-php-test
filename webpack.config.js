@@ -5,17 +5,20 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const config = {
 	entry: {
 		// adicionar para otras paginas php o html
-		main: __dirname + '/src/js/main.js',
-		usuarios: __dirname + '/src/js/usuarios.js',
-		productos: __dirname + '/src/js/productos.js',
+		// main: __dirname + '/src/js/main.js',
+		// usuarios: __dirname + '/src/js/usuarios.js',
+		// productos: __dirname + '/src/js/productos.js',
+
+		login: __dirname + '/src/js/login.js',
+
 	},
-	watch:true,
+	watch: true,
 	output: {
-		path: __dirname + '/dist/js',
+		path: __dirname + '/dist/public/js',
 		publicPath: '/dist', //corprotec.com/public online
 		filename: '[name].bundle.js'
 	},
-	
+
 	module: {
 		// loaders:[
 		// 	{ test: /\.styl$/, loader: 'style-loader!css-loader!stylus-loader' }

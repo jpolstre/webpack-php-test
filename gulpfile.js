@@ -20,10 +20,10 @@ var paths = {
 // A gulpfile is just another node program and you can use any package available on npm
 gulp.task('clean', function () {
   // You can use multiple globbing patterns as you would with `gulp.src`
-  return del(['dist']);
+  return del(['dist/public', 'dist/application/views']);
 });
 gulp.task('php', function () {
-  gulp.src(paths.php).pipe(gulp.dest('dist/views'));
+  gulp.src(paths.php).pipe(gulp.dest('dist/application/views'));
 });
 
 function onBuild(done) {
@@ -64,13 +64,13 @@ gulp.task('images', function () {
     .pipe(imagemin({
       optimizationLevel: 5
     }))
-    .pipe(gulp.dest('dist/img'));
+    .pipe(gulp.dest('dist/public/img'));
 });
 
 gulp.task('connect-sync', function () {
   connect.server({}, function () {
     browserSync.init({
-      proxy: 'localhost:8000',
+      proxy: 'localhost:8000/dist',
       open: 'external' //INJECTA EN TODO EL DOMINIO.
     });
   });
@@ -88,12 +88,12 @@ gulp.task('connect-sync', function () {
   gulp.watch(paths.images).on('change', function () {
     gulp.src(paths.images).pipe(imagemin({
       optimizationLevel: 5
-    })).pipe(gulp.dest('dist/img')).pipe(browserSync.stream());
+    })).pipe(gulp.dest('dist/public/img')).pipe(browserSync.stream());
     // browserSync.reload();
   });
 
   gulp.watch(paths.php).on('change', function () {
-    gulp.src(paths.php).pipe(gulp.dest('dist/views')).pipe(browserSync.stream());
+    gulp.src(paths.php).pipe(gulp.dest('dist/application/views')).pipe(browserSync.stream());
     // browserSync.reload();
   });
 });
